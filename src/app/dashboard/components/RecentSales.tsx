@@ -21,10 +21,10 @@ export function RecentSales() {
     <div className="space-y-8">
       {
         OrdersData.splice(0, 5).map(order => (
-          <div className="flex items-center flex-wrap w-auto justify-between border-b pb-2" key={order.id}>
+          <div className="flex items-center flex-wrap w-auto justify-between border-b pb-2" key={order._id}>
             <div className="flex flex-wrap gap-2">
               <Avatar className="h-9 w-9">
-                <AvatarImage src={order.pic} alt="Avatar" />
+                <AvatarImage src={order.items[0].productId.firstImage} alt="Avatar" />
                 <AvatarFallback>OM</AvatarFallback>
               </Avatar>
               <div className="space-y-1 ">
@@ -34,7 +34,7 @@ export function RecentSales() {
                 </p>
               </div>
             </div>
-            <div className="-auto font-medium">₦{order.product.price.toLocaleString()}</div>
+            <div className="-auto font-medium">₦{order.items[0].price.toLocaleString()}</div>
           </div>
         ))
       }

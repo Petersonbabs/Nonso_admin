@@ -40,8 +40,8 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-20">
-      <h2 className="text-2xl font-semibold mb-6">Admin Login</h2>
+    <div className="max-w-md w-[90vw] translate-y-[50%] mx-auto mt-20">
+      <h2 className="text-2xl font-semibold text-center text-black">Nonso Admin Login</h2>
       <form onSubmit={onSubmit}>
         <div>
           <Label className="text-gray-700">Email</Label>

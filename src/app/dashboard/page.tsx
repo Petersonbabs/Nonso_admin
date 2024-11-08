@@ -32,7 +32,7 @@ export default function DashboardPage() {
   return (
     <>
 
-      <div className=" flex-col md:flex pb-24">
+      <div className=" flex-col md:flex ">
 
 
         {/* DETAILS */}

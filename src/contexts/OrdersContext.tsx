@@ -2,16 +2,15 @@ import { ReactNode, createContext, useContext, useState } from "react";
 import axios from 'axios'
 import { toast } from "sonner";
 import { useAuthContext } from "./AuthContext";
-import { useRouter } from "next/navigation";
 
-export interface ProductProps {
+export interface OrderProps {
     _id: string;
     name: string;
-    price: string;
-    description: string;
-    firstImage: File;
-    secondImage: File;
-    category: string;
+    address: string;
+    email: string;
+    phone: string;
+    city: string;
+    state: string;
 }
 
 interface ProductContextType {
@@ -21,7 +20,7 @@ interface ProductContextType {
     addProduct: (data: FormData) => void
     editProduct: (data: FormData, productId: string) => void
     deleteProduct: (productId: string) => void
-    products: ProductProps[]
+    products: OrderProps[]
     loading: boolean
     deleting: string
 }
@@ -38,7 +37,7 @@ export const useProductContext = () => {
 export default function ProductProvider({ children }: { children: ReactNode }) {
     const { adminId } = useAuthContext()
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-    const [products, setProducts] = useState<ProductProps[]>([])
+    const [products, setProducts] = useState<OrderProps[]>([])
     const [loading, setLoading] = useState(false)
     const [deleting, setDeleting] = useState('')
 
