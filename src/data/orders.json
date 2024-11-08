@@ -1,0 +1,123 @@
+[
+    {
+        "id": 1,
+        "name": "Ikechi Junior",
+        "email": "jun@gmail.com",
+        "pic": "/images/female.jpg",
+        "product": {
+            "name": "Egusi soup",
+            "price": 2000
+        },
+        "totalPrice": 30000
+    },
+    {
+        "id": 2,
+        "name": "Adebayo Adekunle",
+        "email": "adebayo@gmail.com",
+        "pic": "/images/male.jpg",
+        "product": {
+            "name": "Jollof Rice",
+            "price": 1500
+        },
+        "totalPrice": 15000
+    },
+    {
+        "id": 3,
+        "name": "Ngozi Chukwu",
+        "email": "ngozi@gmail.com",
+        "pic": "/images/female.jpg",
+        "product": {
+            "name": "Pounded Yam with Egusi",
+            "price": 3000
+        },
+        "totalPrice": 12000
+    },
+    {
+        "id": 4,
+        "name": "Chinwe Ebuka",
+        "email": "chinwe@gmail.com",
+        "pic": "/images/female.jpg",
+        "product": {
+            "name": "Fried Plantain and Fish",
+            "price": 2500
+        },
+        "totalPrice": 25000
+    },
+    {
+        "id": 5,
+        "name": "Tunde Falade",
+        "email": "tunde@gmail.com",
+        "pic": "/images/male.jpg",
+        "product": {
+            "name": "Ofada Rice and Sauce",
+            "price": 2000
+        },
+        "totalPrice": 16000
+    },
+    {
+        "id": 6,
+        "name": "Bukola Adeyemi",
+        "email": "bukola@gmail.com",
+        "pic": "/images/female.jpg",
+        "product": {
+            "name": "Bitterleaf Soup",
+            "price": 1800
+        },
+        "totalPrice": 14400
+    },
+    {
+        "id": 7,
+        "name": "Uche Chidiebere",
+        "email": "uche@gmail.com",
+        "pic": "/images/male.jpg",
+        "product": {
+            "name": "Pepper Soup",
+            "price": 1500
+        },
+        "totalPrice": 7500
+    },
+    {
+        "id": 8,
+        "name": "Amaka Ifeoma",
+        "email": "amaka@gmail.com",
+        "pic": "/images/female.jpg",
+        "product": {
+            "name": "Efo Riro",
+            "price": 2200
+        },
+        "totalPrice": 22000
+    },
+    {
+        "id": 9,
+        "name": "Oluwaseun Adebayo",
+        "email": "oluwaseun@gmail.com",
+        "pic": "/images/male.jpg",
+        "product": {
+            "name": "Moi Moi and Pap",
+            "price": 1000
+        },
+        "totalPrice": 5000
+    },
+    {
+        "id": 10,
+        "name": "Funmi Ajayi",
+        "email": "funmi@gmail.com",
+        "pic": "/images/female.jpg",
+        "product": {
+            "name": "Banga Soup",
+            "price": 2700
+        },
+        "totalPrice": 13500
+    },
+    {
+        "id": 11,
+        "name": "Sola Igbinovia",
+        "email": "sola@gmail.com",
+        "pic": "/images/male.jpg",
+        "product": {
+            "name": "Afang Soup",
+            "price": 2500
+        },
+        "totalPrice": 12500
+    }
+]
