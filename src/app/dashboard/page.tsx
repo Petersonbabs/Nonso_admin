@@ -1,9 +1,5 @@
 "use client"
 
-
-import Image from "next/image"
-
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -17,14 +13,10 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import { CalendarDateRangePicker } from "./components/DateRangePicker"
-import { MainNav } from "./components/MainNav"
 import { Overview } from "./components/Overview"
 import { RecentSales } from "./components/RecentSales"
-import { Search } from "./components/Search"
-import TeamSwitcher from "./components/TeamSwitcher"
-import { UserNav } from "./components/UserNav"
-import { Calendar, Calendar1, CalendarDays, CookingPot, Loader, ShoppingBasket } from "lucide-react"
+
+import { CalendarDays, CookingPot, Loader, ShoppingBasket } from "lucide-react"
 import { useEffect } from "react"
 import { useProductContext } from "@/contexts/ProductsContext"
 

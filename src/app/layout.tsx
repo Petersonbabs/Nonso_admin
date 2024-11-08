@@ -1,5 +1,4 @@
 "use client"
-import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar"
 import "./globals.css";

@@ -3,7 +3,6 @@
 import Link from "next/link"
 import AppData from "@/data/app.json"
 import { usePathname } from "next/navigation"
-import { Home } from "lucide-react"
 
 export function MainNav() {
 
