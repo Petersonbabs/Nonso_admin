@@ -79,7 +79,7 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
                 // getAllCategories()
             }
 
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
             toast.error(error.response.data.message)
         } finally {
