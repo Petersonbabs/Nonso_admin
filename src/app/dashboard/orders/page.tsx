@@ -14,12 +14,12 @@ import OrderDetailsPage from "./components/OrderDetails";
 
 const AllOrdersPage = () => {
     const { getAllProducts, products, loading, deleting, deleteProduct, getProductsByCategory } = useProductContext()
-    const {handleOrder, loadingOrder} = useOrderContext()
+    const { handleOrder, loadingOrder } = useOrderContext()
     const [categories, setCategories] = useState<string[]>([])
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const itemsPerPage = 10;
-    
+
 
     // Fetch products from an API with pagination
     useEffect(() => {
@@ -81,26 +81,31 @@ const AllOrdersPage = () => {
                                                         </DialogTrigger>
                                                         <DialogContent >
                                                             <DialogTitle>Order Details</DialogTitle>
-                                                            <OrderDetailsPage order={order}/>
+                                                            <OrderDetailsPage order={order} />
                                                         </DialogContent>
                                                     </Dialog>
-                                                    <button className={`text-sm ${order.status == "pending" ? "bg-blue-500" : "bg-green-500"} text-white flex justify-center items-center gap-2 px-2 flex-1 w-24 rounded-bl-lg link-text`} onClick={(e)=>{handleOrder(e.target.textContent.toLowerCase() , order._id)}}>
+                                                    <button className={`text-sm ${order.status == "pending" ? "bg-blue-500" : "bg-green-500"} text-white flex justify-center items-center gap-2 px-2 flex-1 w-24 rounded-bl-lg link-text`} onClick={(e) => {
+                                                            const text = (e.currentTarget as HTMLButtonElement).textContent?.toLowerCase();
+                                                        if (text) {
+                                                            handleOrder(text, order._id);
+                                                        }
+                                                    }}>
                                                         {
                                                             loadingOrder == order._id ?
-                                                            <Loader2 className="animate-spin"/> : 
-                                                            <>
-                                                        {
-                                                            order.status == "pending" ?
-                                                            <Bike className="size-4" /> :
-                                                            <PackageOpen className="size-4" />
-                                                        }
-                                                        {
-                                                            order.status == "pending" ?
-                                                            <span>Dispatch</span> :
+                                                                <Loader2 className="animate-spin" /> :
+                                                                <>
+                                                                    {
+                                                                        order.status == "pending" ?
+                                                                            <Bike className="size-4" /> :
+                                                                            <PackageOpen className="size-4" />
+                                                                    }
+                                                                    {
+                                                                        order.status == "pending" ?
+                                                                            <span>Dispatch</span> :
 
-                                                            <span>Deliver</span>
-                                                        }
-                                                        </>
+                                                                            <span>Deliver</span>
+                                                                    }
+                                                                </>
                                                         }
                                                     </button>
                                                     <button></button>

@@ -38,7 +38,6 @@ export interface OrderProps {
         code: string,
         payment: boolean,
         Date: ReactNode,
-        __v: 0
 }
 
 interface OrderContextType {
