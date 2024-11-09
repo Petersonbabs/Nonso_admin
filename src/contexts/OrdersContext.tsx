@@ -2,20 +2,50 @@ import { ReactNode, createContext, useContext, useState } from "react";
 import axios from 'axios'
 import { toast } from "sonner";
 import { useAuthContext } from "./AuthContext";
+import { ProductProps } from "./ProductsContext";
 
-export interface OrderProps {
-    _id: string;
-    name: string;
-    address: string;
-    email: string;
-    phone: string;
-    city: string;
-    state: string;
+export interface ItemProps {
+    productId: {
+        _id: string,
+        name: string,
+        description: string,
+        price: number,
+        category: string,
+        firstImage: string,
+        firstImageOriginalName: string,
+        secondImage: string,
+        secondImageOriginalName: string,
+    },
+    name: string,
+    quantity: number,
+    price: number,
+    _id: string
 }
 
-interface ProductContextType {
-    getAllProducts: () => void
-    getSingleProduct: (productId: string) => void
+export interface OrderProps {
+    _id: string,
+        name: string,
+        email: string,
+        phone: string,
+        address: string,
+        city: string,
+        state: string,
+        country: string,
+        orderedBy: string,
+        items: ItemProps[],
+        total: number,
+        status: string,
+        code: string,
+        payment: boolean,
+        Date: ReactNode,
+        __v: 0
+}
+
+interface OrderContextType {
+    getAllOrders: () => void
+    loadingOrder: string
+    handleOrder: ( action:string, orderId:string) => void
+    // getSingleProduct: (productId: string) => void
     getProductsByCategory: (categoryName: string) => void
     addProduct: (data: FormData) => void
     editProduct: (data: FormData, productId: string) => void
@@ -25,24 +55,25 @@ interface ProductContextType {
     deleting: string
 }
 
-const ProductContext = createContext<ProductContextType | null>(null)
-export const useProductContext = () => {
-    const context = useContext(ProductContext)
+const OrderContext = createContext<OrderContextType | null>(null)
+export const useOrderContext = () => {
+    const context = useContext(OrderContext)
     if (!context) {
-        throw new Error('Product context must be in a context provider!')
+        throw new Error('Order context must be in a context provider!')
     }
-    return context as ProductContextType
+    return context as OrderContextType
 }
 
-export default function ProductProvider({ children }: { children: ReactNode }) {
+export default function OrderProvider({ children }: { children: ReactNode }) {
     const { adminId } = useAuthContext()
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
     const [products, setProducts] = useState<OrderProps[]>([])
     const [loading, setLoading] = useState(false)
+    const [loadingOrder, setLoadingOrder] = useState<string>('')
     const [deleting, setDeleting] = useState('')
 
     // getAllProducts
-    const getAllProducts = async () => {
+    const getAllOrders = async () => {
         setLoading(true)
         try {
             const response = await axios(`${baseUrl}/all/product`)
@@ -61,9 +92,24 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
 
 
     // Get single product
-    const getSingleProduct = async (productId: string) => {
-
-
+    const handleOrder =async ( action:string, orderId:string) => {
+        setLoading(true)
+        setLoadingOrder(orderId)
+        try {
+            const response = await axios.post(`${baseUrl}/${action}/order/${adminId}/${orderId}`)
+            console.log(response);
+            const data = response.data
+            if(response.status == 200){
+                toast.success(data.message)
+            }
+            // getAllOrders()
+            
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
+            setLoadingOrder('')
+        }
     }
 
 
@@ -99,7 +145,7 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
             })
             if (response.status === 200) {
                 toast.success(response.data.message)
-                getAllProducts()
+                // getAllProducts()
             }
 
         } catch (error) {
@@ -124,7 +170,7 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
             
             if (response.status === 200) {
                 toast.success('Product updated successfully!')
-                getAllProducts()
+                // getAllProducts()
             }
 
         } catch (error) {
@@ -148,7 +194,7 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
             
             if (response.status === 200) {
                 toast.success(response.data.message)
-                getAllProducts()
+                // getAllProducts()
             }
             
         } catch (error) {
@@ -161,18 +207,21 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
 
 
     const value = {
-        getAllProducts,
-        getSingleProduct,
+        // getAllProducts,
+        // getSingleProduct,
+        handleOrder,
+        getAllOrders,
         getProductsByCategory,
         addProduct,
         editProduct,
         deleteProduct,
         products,
         loading,
+        loadingOrder,
         deleting
     }
 
-    return <ProductContext.Provider value={value}>{children}</ProductContext.Provider>
+    return <OrderContext.Provider value={value}>{children}</OrderContext.Provider>
 
 }
 

@@ -4,6 +4,7 @@ import { AppProgressBar as ProgressBar } from "next-nprogress-bar"
 import "./globals.css";
 import AuthProvider from "@/contexts/AuthContext";
 import ProductProvider from "@/contexts/ProductsContext";
+import OrderProvider from "@/contexts/OrdersContext"
 import { Toaster } from "sonner";
 
 const geistSans = localFont({
@@ -40,8 +41,10 @@ export default function RootLayout({
         />
         <AuthProvider>
           <ProductProvider>
+            <OrderProvider>
             <Toaster richColors position="top-right" closeButton visibleToasts={1}/>
             {children}
+            </OrderProvider>
           </ProductProvider>
         </AuthProvider>
       </body>

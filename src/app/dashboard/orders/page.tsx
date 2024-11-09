@@ -4,17 +4,22 @@ import { Table, TableBody, TableCell, TableHead, TableRow, TableFooter, TableHea
 import { Button } from "@/components/ui/button";
 import { Bike, Edit, Eye, Loader2, PackageOpen, Trash, Truck } from "lucide-react"; // Icons for edit and delete actions
 import { useProductContext } from "@/contexts/ProductsContext";
+import { useOrderContext } from "@/contexts/OrdersContext";
 import OrdersData from "@/data/orders.json"
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import OrderDetailsPage from "./components/OrderDetails";
 
 
 const AllOrdersPage = () => {
     const { getAllProducts, products, loading, deleting, deleteProduct, getProductsByCategory } = useProductContext()
+    const {handleOrder, loadingOrder} = useOrderContext()
     const [categories, setCategories] = useState<string[]>([])
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const itemsPerPage = 10;
+    
 
     // Fetch products from an API with pagination
     useEffect(() => {
@@ -22,7 +27,7 @@ const AllOrdersPage = () => {
     }, [currentPage]);
 
     useEffect(() => {
-        setTotalPages(Math.ceil(products.length / itemsPerPage));
+        setTotalPages(Math.ceil(OrdersData.length / itemsPerPage));
         console.log(OrdersData);
     }, [OrdersData]);
     const paginatedOrders = OrdersData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -69,20 +74,33 @@ const AllOrdersPage = () => {
                                                     </div>
                                                 </div>
                                                 <div className=" flex flex-col h-full gap-1 justify-center link-text items-center" >
-                                                    <button className="text-sm bg-black text-white flex justify-center items-center gap-2 px-2 h-full w-full flex-1 rounded-tl-lg">
-                                                        <Eye className="size-4"/>
-                                                        <span>view</span>
-                                                    </button>
-                                                    <button className={`text-sm ${order.status == "pending" ? "bg-blue-500" : "bg-green-500"} text-white flex justify-center items-center gap-2 px-2 flex-1 rounded-bl-lg link-text`}>
+                                                    <Dialog>
+                                                        <DialogTrigger className="text-sm bg-black text-white flex justify-center items-center gap-2 px-2 h-full w-full flex-1 rounded-tl-lg">
+                                                            <Eye className="size-4" />
+                                                            <span>view</span>
+                                                        </DialogTrigger>
+                                                        <DialogContent >
+                                                            <DialogTitle>Order Details</DialogTitle>
+                                                            <OrderDetailsPage order={order}/>
+                                                        </DialogContent>
+                                                    </Dialog>
+                                                    <button className={`text-sm ${order.status == "pending" ? "bg-blue-500" : "bg-green-500"} text-white flex justify-center items-center gap-2 px-2 flex-1 w-24 rounded-bl-lg link-text`} onClick={(e)=>{handleOrder(e.target.textContent.toLowerCase() , order._id)}}>
+                                                        {
+                                                            loadingOrder == order._id ?
+                                                            <Loader2 className="animate-spin"/> : 
+                                                            <>
                                                         {
                                                             order.status == "pending" ?
-                                                            <Bike className="size-4"/> :
-                                                            <PackageOpen className="size-4"/>
+                                                            <Bike className="size-4" /> :
+                                                            <PackageOpen className="size-4" />
                                                         }
                                                         {
                                                             order.status == "pending" ?
-                                                            <span>Dispatch</span> : 
-                                                            <span>Deliver</span> 
+                                                            <span>Dispatch</span> :
+
+                                                            <span>Deliver</span>
+                                                        }
+                                                        </>
                                                         }
                                                     </button>
                                                     <button></button>

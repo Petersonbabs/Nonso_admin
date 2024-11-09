@@ -2,15 +2,16 @@
 
 import { ReactNode } from "react"
 import { MainNav } from "./components/MainNav"
+import { redirect } from "next/navigation"
 // import { redirect } from "next/navigation"
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-  // const adminId = localStorage.getItem('adminId')
+  const adminId = localStorage.getItem('adminId')
 
 
-  // if(!adminId){
-  //   redirect('/')
-  // }
+  if(!adminId){
+    redirect('/')
+  }
 
   return (
     <>
