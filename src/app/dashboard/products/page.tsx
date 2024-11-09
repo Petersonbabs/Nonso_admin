@@ -2,18 +2,22 @@
 import { useEffect, useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableRow, TableFooter, TableHeader } from "@/components/ui/table"; // Assume ShadCN has custom table components
 import { Button } from "@/components/ui/button";
-import { Edit, Loader2, Trash } from "lucide-react"; // Icons for edit and delete actions
+import { Edit, Loader2, Plus, Trash } from "lucide-react"; // Icons for edit and delete actions
 import { useProductContext } from "@/contexts/ProductsContext";
 import AddProductForm from "./components/forms/AddProduct";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import EditProductForm from "./components/forms/EditProductForm";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { SelectLabel, SelectValue } from "@radix-ui/react-select";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 
 const AllProducts = () => {
-    const { getAllProducts, products, loading, deleting, deleteProduct, getProductsByCategory } = useProductContext()
+    const { getAllProducts, products, loading, deleting, deleteProduct, getProductsByCategory, addCategory, loadingCategory } = useProductContext()
     const [categories, setCategories] = useState<string[]>([])
+    const [newCategory, setNewCategory] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const itemsPerPage = 10;
@@ -65,7 +69,30 @@ const AllProducts = () => {
                 </Dialog>
             </div>
 
-            <section className="my-4 text-black">
+            <section className="my-4 text-black flex gap-2 items-center">
+                <Popover>
+                    <PopoverTrigger className="bg-black text-white p-1">
+                        <Plus />
+                    </PopoverTrigger>
+                    <PopoverContent className="ml-4">
+                        <form className="flex gap-2" onSubmit={(e) => {
+                            e.preventDefault()
+                            addCategory(newCategory)
+                        }}>
+                            <Input placeholder="New category name" onChange={(e) => {
+                                setNewCategory(e.target.value)
+                            }} />
+                            <Button>
+                                {
+                                    loadingCategory ?
+                                        <Loader2 className="animate-spin" /> :
+                                    <span>Add</span>
+                                }
+                            </Button>
+                        </form>
+                    </PopoverContent>
+                </Popover>
+
                 <Select onValueChange={handleCategoryCall}>
                     <SelectTrigger className="w-[180px] bg-black text-white">
                         <SelectValue placeholder="All categories" />

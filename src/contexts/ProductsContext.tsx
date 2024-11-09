@@ -18,11 +18,13 @@ interface ProductContextType {
     getAllProducts: () => void
     getSingleProduct: (productId: string) => void
     getProductsByCategory: (categoryName: string) => void
+    addCategory:  (name:string) => void
     addProduct: (data: FormData) => void
     editProduct: (data: FormData, productId: string) => void
     deleteProduct: (productId: string) => void
     products: ProductProps[]
     loading: boolean
+    loadingCategory: boolean
     deleting: string
 }
 
@@ -40,6 +42,7 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
     const [products, setProducts] = useState<ProductProps[]>([])
     const [loading, setLoading] = useState(false)
+    const [loadingCategory, setLoadingCategory] = useState(false)
     const [deleting, setDeleting] = useState('')
 
     // getAllProducts
@@ -67,7 +70,22 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
 
     }
 
+    const addCategory =async (name:string) => {
+        setLoadingCategory(true)
+        try {
+            const response = await axios.post(`${baseUrl}/category/${adminId}`, {name})
+            if (response.status === 200) {
+                toast.success(response.data.message)
+                // getAllCategories()
+            }
 
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message)
+        } finally {
+            setLoadingCategory(false)
+        }
+    }
 
     // get products by category
     const getProductsByCategory = async (categoryName: string) => {
@@ -165,11 +183,13 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
         getAllProducts,
         getSingleProduct,
         getProductsByCategory,
+        addCategory,
         addProduct,
         editProduct,
         deleteProduct,
         products,
         loading,
+        loadingCategory,
         deleting
     }
 
