@@ -41,17 +41,18 @@ export interface OrderProps {
 }
 
 interface OrderContextType {
-    getAllOrders: () => void
-    loadingOrder: string
-    handleOrder: ( action:string, orderId:string) => void
-    // getSingleProduct: (productId: string) => void
-    getProductsByCategory: (categoryName: string) => void
-    addProduct: (data: FormData) => void
-    editProduct: (data: FormData, productId: string) => void
-    deleteProduct: (productId: string) => void
-    products: OrderProps[]
-    loading: boolean
-    deleting: string
+    getAllOrders: (status: string) => void;
+    getPendingOrders: () => void;
+    getDispatchedOrders: () => void;
+    getDeliveredOrders: () => void;
+    loadingOrder: string;
+    loadingDelivered: boolean;
+    loading: boolean;
+    orders: OrderProps[];
+    pendingOrders: OrderProps[];
+    deliveredOrders: OrderProps[];
+    dispatchedOrders: OrderProps[];
+    handleOrder: ( action:string, orderId:string) => void;
 }
 
 const OrderContext = createContext<OrderContextType | null>(null)
@@ -66,158 +67,119 @@ export const useOrderContext = () => {
 export default function OrderProvider({ children }: { children: ReactNode }) {
     const { adminId } = useAuthContext()
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-    const [products, setProducts] = useState<OrderProps[]>([])
+    const [orders, setOrders] = useState<OrderProps[]>([])
+    const [pendingOrders, setPendingOrders] = useState<OrderProps[]>([])
+    const [dispatchedOrders, setDispatchedOrders] = useState<OrderProps[]>([])
+    const [deliveredOrders, setDeliveredOrders] = useState<OrderProps[]>([])
     const [loading, setLoading] = useState(false)
+    const [loadingDelivered, setLoadingDelivered] = useState(false)
     const [loadingOrder, setLoadingOrder] = useState<string>('')
-    const [deleting, setDeleting] = useState('')
 
-    // getAllProducts
-    const getAllOrders = async () => {
+
+    // getAll
+    const getAllOrders = async (status: string) => {
         setLoading(true)
         try {
-            const response = await axios(`${baseUrl}/all/product`)
+            const response = await axios(`${baseUrl}/${status}/order/672b0999ae6838dfb57f387b`)
             const data = await response.data
             if (response.status == 200) {
-                setProducts(data)
+                setOrders(data.order)
+                
             }
-
         } catch (error) {
             console.log(error);
 
         } finally {
             setLoading(false)
+        }
+    }
+
+    const getPendingOrders = async () => {
+        setLoading(true)
+        try {
+            const response = await axios(`${baseUrl}/pending/order/672b0999ae6838dfb57f387b`)
+            const data = await response.data
+            if (response.status == 200) {
+                setPendingOrders(data.order)
+            }
+        } catch (error) {
+            console.log(error);
+
+        } finally {
+            setLoading(false)
+        }
+    }
+    
+    const getDispatchedOrders = async () => {
+        setLoading(true)
+        try {
+            const response = await axios(`${baseUrl}/dispatched/order/672b0999ae6838dfb57f387b`)
+            const data = await response.data
+            
+            if (response.status == 200) {
+                setDispatchedOrders(data.order)
+            }
+        } catch (error) {
+            console.log(error);
+
+        } finally {
+            setLoading(false)
+        }
+    }
+    
+    const getDeliveredOrders = async () => {
+        setLoading(true)
+        setLoadingDelivered(true)
+        try {
+            const response = await axios(`${baseUrl}/delivered/order/672b0999ae6838dfb57f387b`)
+            const data = await response.data
+            console.log(data);
+            
+            if (response.status == 200) {
+                setDeliveredOrders(data.order)
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
+            setLoadingDelivered(false)
         }
     }
 
 
     // Get single product
     const handleOrder =async ( action:string, orderId:string) => {
-        setLoading(true)
         setLoadingOrder(orderId)
         try {
             const response = await axios.post(`${baseUrl}/${action}/order/${adminId}/${orderId}`)
-            console.log(response);
             const data = response.data
             if(response.status == 200){
                 toast.success(data.message)
             }
-            // getAllOrders()
+            getAllOrders('pending')
             
         } catch (error) {
             console.log(error);
         } finally {
-            setLoading(false)
             setLoadingOrder('')
         }
     }
 
 
 
-    // get products by category
-    const getProductsByCategory = async (categoryName: string) => {
-        setLoading(true)
-        try {
-            const response = await axios(`${baseUrl}/product/category/${categoryName}`)
-            const data = await response.data
-            console.log(data);
-            if (response.status == 200) {
-                setProducts(data.products)
-            }
-
-        } catch (error) {
-            console.log(error);
-
-        } finally {
-            setLoading(false)
-        }
-    }
-
-
-    // Add new product
-    const addProduct = async (data: FormData) => {
-        setLoading(true)
-        try {
-            const response = await axios.post(`${baseUrl}/product/${adminId}`, data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                }
-            })
-            if (response.status === 200) {
-                toast.success(response.data.message)
-                // getAllProducts()
-            }
-
-        } catch (error) {
-            console.log(error);
-
-        } finally {
-            setLoading(false)
-        }
-
-    }
-
-    // Edit new product
-    const editProduct = async (data: FormData, productId: string) => {
-        setLoading(true)
-        try {
-            const response = await axios.put(`${baseUrl}/product/${adminId}/${productId}`, data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                }
-            })
-            
-            
-            if (response.status === 200) {
-                toast.success('Product updated successfully!')
-                // getAllProducts()
-            }
-
-        } catch (error) {
-            console.log(error);
-
-        } finally {
-            setLoading(false)
-        }
-
-
-    }
-
-
-    // Edit new product
-    const deleteProduct = async (productId: string) => {
-        setDeleting(productId)
-        try {
-            const response = await axios.delete(`${baseUrl}/product/${adminId}/${productId}`)
-            console.log(response);
-            
-            
-            if (response.status === 200) {
-                toast.success(response.data.message)
-                // getAllProducts()
-            }
-            
-        } catch (error) {
-            console.log(error);
-            
-        } finally {
-            setDeleting('')
-        }
-    }
-
-
     const value = {
-        // getAllProducts,
-        // getSingleProduct,
         handleOrder,
         getAllOrders,
-        getProductsByCategory,
-        addProduct,
-        editProduct,
-        deleteProduct,
-        products,
+        getPendingOrders,
+        getDispatchedOrders,
+        getDeliveredOrders,
+        orders,
+        pendingOrders,
+        dispatchedOrders,
+        deliveredOrders,
         loading,
+        loadingDelivered,
         loadingOrder,
-        deleting
     }
 
     return <OrderContext.Provider value={value}>{children}</OrderContext.Provider>

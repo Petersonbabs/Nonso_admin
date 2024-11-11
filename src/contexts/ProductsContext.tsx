@@ -16,9 +16,11 @@ export interface ProductProps {
 
 interface ProductContextType {
     getAllProducts: () => void
+    getAllCategories: () => void
     getSingleProduct: (productId: string) => void
     getProductsByCategory: (categoryName: string) => void
-    addCategory:  (name:string) => void
+    categories: string[];
+    addCategory: (name: string) => void
     addProduct: (data: FormData) => void
     editProduct: (data: FormData, productId: string) => void
     deleteProduct: (productId: string) => void
@@ -41,6 +43,7 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
     const { adminId } = useAuthContext()
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
     const [products, setProducts] = useState<ProductProps[]>([])
+    const [categories, setCategories] = useState<string[]>([])
     const [loading, setLoading] = useState(false)
     const [loadingCategory, setLoadingCategory] = useState(false)
     const [deleting, setDeleting] = useState('')
@@ -70,10 +73,24 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
 
     }
 
-    const addCategory =async (name:string) => {
+    const getAllCategories = async () => {
+        setLoading(true);
+        try {
+            const response = await axios(`${baseUrl}/category`)
+            const { allCategory } = await response.data
+            setCategories(allCategory.map((item: any) => item.name));
+
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const addCategory = async (name: string) => {
         setLoadingCategory(true)
         try {
-            const response = await axios.post(`${baseUrl}/category/${adminId}`, {name})
+            const response = await axios.post(`${baseUrl}/category/${adminId}`, { name })
             if (response.status === 200) {
                 toast.success(response.data.message)
                 // getAllCategories()
@@ -139,8 +156,8 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
                     "Content-Type": "multipart/form-data",
                 }
             })
-            
-            
+
+
             if (response.status === 200) {
                 toast.success('Product updated successfully!')
                 getAllProducts()
@@ -163,16 +180,16 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
         try {
             const response = await axios.delete(`${baseUrl}/product/${adminId}/${productId}`)
             console.log(response);
-            
-            
+
+
             if (response.status === 200) {
                 toast.success(response.data.message)
                 getAllProducts()
             }
-            
+
         } catch (error) {
             console.log(error);
-            
+
         } finally {
             setDeleting('')
         }
@@ -184,6 +201,8 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
         getSingleProduct,
         getProductsByCategory,
         addCategory,
+        getAllCategories,
+        categories,
         addProduct,
         editProduct,
         deleteProduct,

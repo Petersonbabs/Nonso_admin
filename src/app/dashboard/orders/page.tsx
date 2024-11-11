@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableRow, TableFooter, TableHeader } from "@/components/ui/table"; // Assume ShadCN has custom table components
 import { Button } from "@/components/ui/button";
-import { Bike, Edit, Eye, Loader2, PackageOpen, Trash, Truck } from "lucide-react"; // Icons for edit and delete actions
+import { Bike, Edit, Eye, Loader2, PackageOpen, ThumbsUp, Trash, Truck } from "lucide-react"; // Icons for edit and delete actions
 import { useProductContext } from "@/contexts/ProductsContext";
 import { useOrderContext } from "@/contexts/OrdersContext";
 import OrdersData from "@/data/orders.json"
@@ -10,36 +10,58 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import OrderDetailsPage from "./components/OrderDetails";
+import { Select, SelectContent, SelectItem, SelectLabel, SelectTrigger } from "@/components/ui/select";
+import { useRouter, useSearchParams } from "next/navigation";
 
 
 const AllOrdersPage = () => {
-    const { getAllProducts, products, loading, deleting, deleteProduct, getProductsByCategory } = useProductContext()
-    const { handleOrder, loadingOrder } = useOrderContext()
-    const [categories, setCategories] = useState<string[]>([])
+    const { getAllProducts, products, deleting, deleteProduct, getProductsByCategory } = useProductContext()
+    const { handleOrder, loadingOrder, loading, getAllOrders, orders } = useOrderContext()
+    const router = useRouter()
+    const query = useSearchParams()
+    const params = new URLSearchParams(query)
+    const status = query.get('status') || 'pending'
+
+
+    const [selectedStatus, setSelectedStatus] = useState<string>(status)
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const itemsPerPage = 10;
 
 
-    // Fetch products from an API with pagination
     useEffect(() => {
-        getAllProducts();
-    }, [currentPage]);
+        getAllOrders(selectedStatus.toLowerCase())
+    }, [selectedStatus])
 
     useEffect(() => {
-        setTotalPages(Math.ceil(OrdersData.length / itemsPerPage));
-        console.log(OrdersData);
-    }, [OrdersData]);
-    const paginatedOrders = OrdersData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+        setTotalPages(Math.ceil(orders?.length / itemsPerPage));
+    }, [orders]);
+    const paginatedOrders = orders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
 
+    const handleChangeStatus = (value: string) => {
+        setSelectedStatus(value);
+        params.set('status', value);
+        router.push(`/dashboard/orders?${params.toString()}`);
+    }
 
 
 
     return (
         <div className="max-w-6xl mx-auto p-6">
-            <div className="flex mb-4 justify-between">
+            <div className="mb-4 justify-between">
                 <h1 className="text-3xl font-bold mb-6 text-black">Manage Orders</h1>
+                <p className="text-black">You have {orders.length} {selectedStatus} orders.</p>
+                <Select onValueChange={(value) => { handleChangeStatus(value) }}>
+                    <SelectTrigger className="text-black">{selectedStatus}</SelectTrigger>
+                    <SelectContent>
+                        {
+                            ['Pending', "Dispatched", "Delivered"].map(status => (
+                                <SelectItem value={status} key={status}>{status}</SelectItem>
+                            ))
+                        }
+                    </SelectContent>
+                </Select>
             </div>
 
             {
@@ -57,7 +79,7 @@ const AllOrdersPage = () => {
                                 :
                                 <section className="w-full border border-gray-200 px-2 rounded">
                                     <section className="grid gap-2 py-4  text-gray-800">
-                                        {paginatedOrders?.map(order => (
+                                        {paginatedOrders?.slice().reverse().map(order => (
                                             <div className="flex items-center  relative flex-wrap p-2 w-auto shadow justify-between border-b pb-2" key={order._id}>
                                                 <span className={`absolute text-[12px] px-2 top-0 left-0 z-10 h-4 w-4 rounded-br  ${order.status == "pending" ? "bg-orange-500" : order.status == "dispatched" ? "bg-blue-600" : "bg-green-500"} text-white`}></span>
                                                 <div className="flex gap-2 items-center">
@@ -84,8 +106,8 @@ const AllOrdersPage = () => {
                                                             <OrderDetailsPage order={order} />
                                                         </DialogContent>
                                                     </Dialog>
-                                                    <button className={`text-sm ${order.status == "pending" ? "bg-blue-500" : "bg-green-500"} text-white flex justify-center items-center gap-2 px-2 flex-1 w-24 rounded-bl-lg link-text`} onClick={(e) => {
-                                                            const text = (e.currentTarget as HTMLButtonElement).textContent?.toLowerCase();
+                                                    <button disabled={order.status == 'delivered'} className={`text-sm ${order.status == "pending" ? "bg-blue-500" : order.status == "delivered" ? "bg-green-300" : "bg-green-500"} text-white flex justify-center items-center gap-2 px-2 flex-1 w-24 rounded-bl-lg link-text`} onClick={(e) => {
+                                                        const text = (e.currentTarget as HTMLButtonElement).textContent?.toLowerCase();
                                                         if (text) {
                                                             handleOrder(text, order._id);
                                                         }
@@ -97,13 +119,16 @@ const AllOrdersPage = () => {
                                                                     {
                                                                         order.status == "pending" ?
                                                                             <Bike className="size-4" /> :
-                                                                            <PackageOpen className="size-4" />
+                                                                            order.status == "delivered" ?
+                                                                                <ThumbsUp /> :
+                                                                                <PackageOpen className="size-4" />
                                                                     }
                                                                     {
                                                                         order.status == "pending" ?
                                                                             <span>Dispatch</span> :
-
-                                                                            <span>Deliver</span>
+                                                                            order.status == "delivered" ?
+                                                                                <span>Delivered</span> :
+                                                                                <span>Deliver</span>
                                                                     }
                                                                 </>
                                                         }

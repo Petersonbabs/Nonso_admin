@@ -16,16 +16,21 @@ import {
 import { Overview } from "./components/Overview"
 import { RecentSales } from "./components/RecentSales"
 
-import { CalendarDays, CookingPot, Loader, ShoppingBasket } from "lucide-react"
+import { Bike, CalendarDays, CookingPot, Loader, ShoppingBasket } from "lucide-react"
 import { useEffect } from "react"
 import { useProductContext } from "@/contexts/ProductsContext"
+import { useOrderContext } from "@/contexts/OrdersContext"
 
 
 
 export default function DashboardPage() {
-  const {getAllProducts, products, loading} = useProductContext()
-  useEffect(()=>{
+  const { getAllProducts, products, loading } = useProductContext()
+  const { getAllOrders, orders, pendingOrders, dispatchedOrders, deliveredOrders, getPendingOrders, getDispatchedOrders, getDeliveredOrders } = useOrderContext()
+  useEffect(() => {
     getAllProducts()
+    getPendingOrders()
+    getDispatchedOrders()
+    getDeliveredOrders()
   }, [])
 
 
@@ -66,12 +71,42 @@ export default function DashboardPage() {
                     <ShoppingBasket opacity={.5} size={16} className="text-orange-500" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">$45,231.89</div>
+                    <div className="text-2xl font-bold">
+                      {
+                        loading ?
+                          <Loader className="animate-spin my-2" /> :
+                          <span>{pendingOrders.length}</span>
+                      }
+                    </div>
                     <p className="text-xs text-muted-foreground">
                       last 30 days
                     </p>
                   </CardContent>
                 </Card>
+
+                {/* Pending Orders */}
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Dispatched Orders
+                    </CardTitle>
+                    <Bike opacity={.5} size={16} className="text-blue-500" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">
+                      {
+                        loading ?
+                          <Loader className="animate-spin my-2" /> :
+                          <span>{dispatchedOrders.length}</span>
+                      }
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      last 30 days
+                    </p>
+                  </CardContent>
+                </Card>
+
+
 
                 {/* Products Sold */}
                 <Card>
@@ -82,12 +117,19 @@ export default function DashboardPage() {
                     <CookingPot opacity={.5} size={16} className="text-green-500" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">350</div>
+                    <div className="text-2xl font-bold">
+                      {
+                        loading ?
+                          <Loader className="animate-spin my-2" /> :
+                          <span>{deliveredOrders.length}</span>
+                      }
+                    </div>
                     <p className="text-xs text-muted-foreground">
                       last 30 days
                     </p>
                   </CardContent>
                 </Card>
+
                 <Card className="hover:bg-gray-50 cursor-pointer">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Products in store</CardTitle>
@@ -109,8 +151,8 @@ export default function DashboardPage() {
                     <div className="text-2xl font-bold">
                       {
                         loading ?
-                        <Loader className="animate-spin my-2"/> :
-                        <span>{products.length}</span>
+                          <Loader className="animate-spin my-2" /> :
+                          <span>{products.length}</span>
                       }
                     </div>
                   </CardContent>
@@ -154,7 +196,7 @@ export default function DashboardPage() {
                   <CardHeader>
                     <CardTitle>Recent Sales</CardTitle>
                     <CardDescription>
-                      You made 265 sales this month.
+                      You have had {deliveredOrders.length} successful orders so far.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>

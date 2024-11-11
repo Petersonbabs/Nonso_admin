@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useProductContext } from "@/contexts/ProductsContext";
 import { Loader } from "lucide-react";
 import { Dialog } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface EditProductFormProps {
     product: ProductProps;
@@ -23,7 +24,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
         secondImage: null as unknown as File,
         category: "",
     });
-    const { editProduct, loading } = useProductContext();
+    const { editProduct, loading, categories } = useProductContext();
 
     // Load initial data from the passed product prop
     useEffect(() => {
@@ -99,13 +100,25 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
 
                     <div>
                         <Label>Category</Label>
-                        <Input
-                            name="category"
-                            value={formData.category}
-                            onChange={handleInputChange}
-                            placeholder="Category"
-                            required
-                        />
+                        <Select
+                            onValueChange={(value) =>
+                                setFormData((prev) => ({ ...prev, category: value }))
+                            }
+                            value={formData.category}>
+                            <SelectTrigger className="text-black">
+                                <SelectValue placeholder="Choose category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    {/* <SelectItem value="s">Select category</SelectItem> */}
+                                    {
+                                        categories.map(category => (
+                                            <SelectItem value={category}>{category}</SelectItem>
+                                        ))
+                                    }
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <div>

@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useProductContext } from "@/contexts/ProductsContext";
 import { Loader } from "lucide-react";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const AddProductForm = () => {
   const [formData, setFormData] = useState<Omit<ProductProps, "_id">>({
@@ -18,7 +19,7 @@ const AddProductForm = () => {
     secondImage: null as unknown as File,
     category: "",
   });
-  const {addProduct, loading} = useProductContext()
+  const { addProduct, loading, categories } = useProductContext()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -50,17 +51,17 @@ const AddProductForm = () => {
     if (formData.firstImage) data.append("firstImage", formData.firstImage);
     if (formData.secondImage) data.append("secondImage", formData.secondImage);
     console.log(data);
-    
+
     addProduct(data)
     setFormData({
-        name: "",
-        price: "",
-        description: "",
-        firstImage: null as any,
-        secondImage: null as any,
-        category: "",
-      });
-    
+      name: "",
+      price: "",
+      description: "",
+      firstImage: null as any,
+      secondImage: null as any,
+      category: "",
+    });
+
   };
 
   return (
@@ -91,13 +92,25 @@ const AddProductForm = () => {
 
         <div>
           <Label>Category</Label>
-          <Input
-            name="category"
-            value={formData.category}
-            onChange={handleInputChange}
-            placeholder="Category"
-            required
-          />
+          <Select
+            onValueChange={(value) =>
+              setFormData((prev) => ({ ...prev, category: value }))
+            }
+            value={formData.category}>
+            <SelectTrigger className="text-black">
+              <SelectValue placeholder="Choose category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {/* <SelectItem value="s">Select category</SelectItem> */}
+                {
+                  categories.map(category => (
+                    <SelectItem value={category}>{category}</SelectItem>
+                  ))
+                }
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
 
         <div>
@@ -131,9 +144,9 @@ const AddProductForm = () => {
 
         <Button type="submit" className="w-full" disabled={loading}>
           {
-            loading?
-            <Loader className="animate-spin"/> :
-            <span>Add Product</span>
+            loading ?
+              <Loader className="animate-spin" /> :
+              <span>Add Product</span>
           }
         </Button>
       </form>

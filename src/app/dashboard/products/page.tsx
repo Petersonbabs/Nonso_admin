@@ -15,8 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 
 
 const AllProducts = () => {
-    const { getAllProducts, products, loading, deleting, deleteProduct, getProductsByCategory, addCategory, loadingCategory } = useProductContext()
-    const [categories, setCategories] = useState<string[]>([])
+    const { getAllProducts, products, loading, deleting, deleteProduct, getProductsByCategory, addCategory, loadingCategory, getAllCategories, categories } = useProductContext()
     const [newCategory, setNewCategory] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -24,26 +23,20 @@ const AllProducts = () => {
 
     // Fetch products from an API with pagination
     useEffect(() => {
+        getAllCategories()
+    }, [])
+    useEffect(() => {
         getAllProducts();
     }, [currentPage]);
 
     useEffect(() => {
         if (products) {
-            const uniqueCategories = Array.from(new Set(products.map(product => product.category)));
-            setCategories(uniqueCategories);
             setTotalPages(Math.ceil(products.length / itemsPerPage));
         }
     }, [products]);
     const paginatedProducts = products.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-    useEffect(() => {
-        if (products) {
-            const datas = products.map(product => product.category)
-            setCategories(datas)
-            console.log(categories);
 
-        }
-    }, [products])
 
     const handleCategoryCall = (category: string) => {
         if (category == 'all') {
@@ -86,7 +79,7 @@ const AllProducts = () => {
                                 {
                                     loadingCategory ?
                                         <Loader2 className="animate-spin" /> :
-                                    <span>Add</span>
+                                        <span>Add</span>
                                 }
                             </Button>
                         </form>
@@ -100,9 +93,11 @@ const AllProducts = () => {
                     <SelectContent>
                         <SelectGroup>
                             <SelectItem value="all">All Categories</SelectItem>
-                            <SelectItem value="swallow">Swallow</SelectItem>
-                            <SelectItem value="drinks">Drinks</SelectItem>
-                            <SelectItem value="rice">Rice</SelectItem>
+                            {
+                                categories.map(category => (
+                                    <SelectItem value={category}>{category}</SelectItem>
+                                ))
+                            }
                         </SelectGroup>
                     </SelectContent>
                 </Select>
@@ -132,7 +127,7 @@ const AllProducts = () => {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {paginatedProducts?.map((product) => (
+                                        {paginatedProducts.slice().reverse().map((product) => (
                                             <TableRow key={product._id} className="hover:bg-gray-100 text-gray-700">
                                                 <TableCell>{product.name}</TableCell>
                                                 <TableCell>₦{Number(product.price).toLocaleString()}</TableCell>
