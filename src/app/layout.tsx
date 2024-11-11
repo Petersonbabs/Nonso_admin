@@ -6,6 +6,7 @@ import AuthProvider from "@/contexts/AuthContext";
 import ProductProvider from "@/contexts/ProductsContext";
 import OrderProvider from "@/contexts/OrdersContext"
 import { Toaster } from "sonner";
+import { Suspense } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,12 +34,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Suspense>
         <ProgressBar
           height="4px"
           color="#fffd00"
           options={{ showSpinner: false }}
           shallowRouting
-        />
+          />
+          </Suspense>
         <AuthProvider>
           <ProductProvider>
             <OrderProvider>

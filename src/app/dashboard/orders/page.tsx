@@ -14,16 +14,18 @@ import { useRouter, useSearchParams } from "next/navigation";
 const AllOrdersPage = () => {
     const { handleOrder, loadingOrder, loading, getAllOrders, orders } = useOrderContext();
     const router = useRouter();
-    const query = useSearchParams();
-    
-    const [selectedStatus, setSelectedStatus] = useState<string>(query?.get("status") || "pending");
+
+    const [selectedStatus, setSelectedStatus] = useState<string>("pending");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const itemsPerPage = 10;
 
     useEffect(() => {
-        getAllOrders(selectedStatus.toLowerCase());
-    }, [selectedStatus]);
+        const query = useSearchParams();
+        const statusFromQuery = query?.get("status") || "pending";
+        setSelectedStatus(statusFromQuery);
+        getAllOrders(statusFromQuery.toLowerCase());
+    }, []);
 
     useEffect(() => {
         setTotalPages(Math.ceil(orders?.length / itemsPerPage));
@@ -31,9 +33,10 @@ const AllOrdersPage = () => {
 
     const paginatedOrders = orders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+
     const handleChangeStatus = (value: string) => {
         setSelectedStatus(value);
-        const params = new URLSearchParams(query);
+        const params = new URLSearchParams();
         params.set("status", value);
         router.push(`/dashboard/orders?${params.toString()}`);
     };
