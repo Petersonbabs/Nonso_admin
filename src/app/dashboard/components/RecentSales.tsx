@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { useOrderContext } from "@/contexts/OrdersContext"
-import { ArrowRight, Loader2 } from "lucide-react"
+import { ArrowRight, Loader2, PackageOpen } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
@@ -40,13 +40,12 @@ export function RecentSales() {
                :
               deliveredOrders?.slice(0, 5).map(order => (
                 <div className="flex items-center flex-wrap w-auto justify-between border-b pb-2" key={order._id}>
-                  <div className="flex flex-wrap gap-2">
-                    <Avatar className="h-9 w-9">
-                      <AvatarImage src={order.items[0].productId.firstImage} alt="Avatar" />
-                      <AvatarFallback>OM</AvatarFallback>
-                    </Avatar>
+                  <div className="flex flex-wrap items-center">
+                    <div className="h-9 w-9 flex items-center justify-center">
+                      <PackageOpen className="text-green-500 animate-bounce"/>
+                    </div>
                     <div className="space-y-1 ">
-                      <p className="text-sm font-medium leading-none">{order.name}</p>
+                      <p className="text-sm font-medium leading-none">{order.items[0].name}</p>
                       <p className="text-sm text-muted-foreground">
                         {order.email}
                       </p>

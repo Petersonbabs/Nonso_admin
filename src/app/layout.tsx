@@ -7,6 +7,9 @@ import ProductProvider from "@/contexts/ProductsContext";
 import OrderProvider from "@/contexts/OrdersContext"
 import { Toaster } from "sonner";
 import { Suspense } from "react";
+import {Montserrat} from "@next/font/google"
+
+const montserrat = Montserrat({weight: ['100' , "200", "300", "400", "500", "600", "700", "800", "900"]})
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -18,6 +21,9 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
+
+
+
 
 // export const metadata: Metadata = {
 //   title: "Admin | Nonso Kitchen",
@@ -32,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={montserrat.className}
       >
         <Suspense>
         <ProgressBar

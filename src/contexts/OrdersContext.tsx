@@ -133,8 +133,6 @@ export default function OrderProvider({ children }: { children: ReactNode }) {
         try {
             const response = await axios(`${baseUrl}/delivered/order/672b0999ae6838dfb57f387b`)
             const data = await response.data
-            console.log(data);
-            
             if (response.status == 200) {
                 setDeliveredOrders(data.order)
             }
