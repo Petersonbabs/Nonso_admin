@@ -6,10 +6,6 @@ import AuthProvider from "@/contexts/AuthContext";
 import ProductProvider from "@/contexts/ProductsContext";
 import OrderProvider from "@/contexts/OrdersContext"
 import { Toaster } from "sonner";
-import { Suspense } from "react";
-import {Montserrat} from "@next/font/google"
-
-const montserrat = Montserrat({weight:'100',  subsets: ['latin']})
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,9 +17,6 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
-
-
-
 
 // export const metadata: Metadata = {
 //   title: "Admin | Nonso Kitchen",
@@ -38,16 +31,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={montserrat.className}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Suspense>
         <ProgressBar
           height="4px"
           color="#fffd00"
           options={{ showSpinner: false }}
           shallowRouting
-          />
-          </Suspense>
+        />
         <AuthProvider>
           <ProductProvider>
             <OrderProvider>
