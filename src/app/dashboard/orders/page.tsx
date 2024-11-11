@@ -12,10 +12,11 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/
 import OrderDetailsPage from "./components/OrderDetails";
 import { Select, SelectContent, SelectItem, SelectLabel, SelectTrigger } from "@/components/ui/select";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 
 const AllOrdersPage = () => {
-    const { getAllProducts, products, deleting, deleteProduct, getProductsByCategory } = useProductContext()
+    // const { getAllProducts, products, deleting, deleteProduct, getProductsByCategory } = useProductContext()
     const { handleOrder, loadingOrder, loading, getAllOrders, orders } = useOrderContext()
     const router = useRouter()
     const query = useSearchParams()
@@ -48,6 +49,7 @@ const AllOrdersPage = () => {
 
 
     return (
+        <Suspense>
         <div className="max-w-6xl mx-auto p-6">
             <div className="mb-4 justify-between">
                 <h1 className="text-3xl font-bold mb-6 text-black">Manage Orders</h1>
@@ -163,9 +165,8 @@ const AllOrdersPage = () => {
                         }
                     </>
             }
-
-
         </div>
+        </Suspense>
     );
 };
 
