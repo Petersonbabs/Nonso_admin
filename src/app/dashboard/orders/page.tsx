@@ -49,7 +49,7 @@ const AllOrdersPage = () => {
 
 
     return (
-        <Suspense>
+        <Suspense  >
         <div className="max-w-6xl mx-auto p-6">
             <div className="mb-4 justify-between">
                 <h1 className="text-3xl font-bold mb-6 text-black">Manage Orders</h1>
