@@ -19,9 +19,9 @@ const AllOrdersPage = () => {
     // const { getAllProducts, products, deleting, deleteProduct, getProductsByCategory } = useProductContext()
     const { handleOrder, loadingOrder, loading, getAllOrders, orders } = useOrderContext()
     const router = useRouter()
-    const query = useSearchParams()
-    const params = new URLSearchParams(query)
-    const status = query.get('status') || 'pending'
+    // const query = useSearchParams()
+    // const params = new URLSearchParams(query)
+    const status = 'pending'
 
 
     const [selectedStatus, setSelectedStatus] = useState<string>(status)
@@ -42,8 +42,8 @@ const AllOrdersPage = () => {
 
     const handleChangeStatus = (value: string) => {
         setSelectedStatus(value);
-        params.set('status', value);
-        router.push(`/dashboard/orders?${params.toString()}`);
+        // params.set('status', value);
+        // router.push(`/dashboard/orders?${params.toString()}`);
     }
 
 
