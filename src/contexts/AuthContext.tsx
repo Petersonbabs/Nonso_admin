@@ -30,7 +30,6 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     const [adminId, setAdminId] = useState<string>('')
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
     const navigation = useRouter()
-    console.log(adminId);
     
 
     useEffect(()=>{
