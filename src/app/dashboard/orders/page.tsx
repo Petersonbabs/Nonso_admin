@@ -86,7 +86,7 @@ const AllOrdersPage = () => {
                                                 <span className={`absolute text-[12px] px-2 top-0 left-0 z-10 h-4 w-4 rounded-br  ${order.status == "pending" ? "bg-orange-500" : order.status == "dispatched" ? "bg-blue-600" : "bg-green-500"} text-white`}></span>
                                                 <div className="flex gap-2 items-center">
                                                     <Avatar className="h-9 w-9">
-                                                        <AvatarImage src={order.items[0].productId.firstImage} alt="Avatar" />
+                                                        <AvatarImage src={order?.items[0]?.productId.firstImage} alt="Avatar" />
                                                         <AvatarFallback>OM</AvatarFallback>
                                                     </Avatar>
                                                     <div className="space-y-1 ">
@@ -94,7 +94,7 @@ const AllOrdersPage = () => {
                                                         <p className="text-sm text-muted-foreground">
                                                             {order.orderedBy.slice(0, 10)}...
                                                         </p>
-                                                        <h3>₦{Number(order.items[0].price).toLocaleString()}</h3>
+                                                        <h3>₦{Number(order?.items[0]?.price).toLocaleString()}</h3>
                                                     </div>
                                                 </div>
                                                 <div className=" flex flex-col h-full gap-1 justify-center link-text items-center" >
@@ -108,7 +108,7 @@ const AllOrdersPage = () => {
                                                             <OrderDetailsPage order={order} />
                                                         </DialogContent>
                                                     </Dialog>
-                                                    <button disabled={order.status == 'delivered'} className={`text-sm ${order.status == "pending" ? "bg-blue-500" : order.status == "delivered" ? "bg-green-300" : "bg-green-500"} text-white flex justify-center items-center gap-2 px-2 flex-1 w-24 rounded-bl-lg link-text`} onClick={(e) => {
+                                                    <button disabled={order?.status == 'delivered'} className={`text-sm ${order.status == "pending" ? "bg-blue-500" : order.status == "delivered" ? "bg-green-300" : "bg-green-500"} text-white flex justify-center items-center gap-2 px-2 flex-1 w-24 rounded-bl-lg link-text`} onClick={(e) => {
                                                         const text = (e.currentTarget as HTMLButtonElement).textContent?.toLowerCase();
                                                         if (text) {
                                                             handleOrder(text, order._id);
@@ -119,9 +119,9 @@ const AllOrdersPage = () => {
                                                                 <Loader2 className="animate-spin" /> :
                                                                 <>
                                                                     {
-                                                                        order.status == "pending" ?
+                                                                        order?.status == "pending" ?
                                                                             <Bike className="size-4" /> :
-                                                                            order.status == "delivered" ?
+                                                                            order?.status == "delivered" ?
                                                                                 <ThumbsUp /> :
                                                                                 <PackageOpen className="size-4" />
                                                                     }
