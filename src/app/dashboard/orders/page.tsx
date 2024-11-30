@@ -86,7 +86,7 @@ const AllOrdersPage = () => {
                                                 <span className={`absolute text-[12px] px-2 top-0 left-0 z-10 h-4 w-4 rounded-br  ${order.status == "pending" ? "bg-orange-500" : order.status == "dispatched" ? "bg-blue-600" : "bg-green-500"} text-white`}></span>
                                                 <div className="flex gap-2 items-center">
                                                     <Avatar className="h-9 w-9">
-                                                        <AvatarImage src={order?.items[0]?.productId.firstImage} alt="Avatar" />
+                                                        <AvatarImage src={order?.items[0]?.productId?.firstImage} alt="Avatar" />
                                                         <AvatarFallback>OM</AvatarFallback>
                                                     </Avatar>
                                                     <div className="space-y-1 ">
