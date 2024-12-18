@@ -113,7 +113,7 @@ const AddProductForm = () => {
     setFormData({
       name: "",
       price: {
-        1.4: 0,
+        "1.4": 0,
         2: 0,
         4: 0,
         8: 0,
@@ -127,7 +127,7 @@ const AddProductForm = () => {
   };
 
   return (
-    <div className=" ">
+    <div className="overflow-scroll">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <Label>Name</Label>

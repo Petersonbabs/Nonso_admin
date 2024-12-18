@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableRow, TableFooter, TableHeader } from "@/components/ui/table"; // Assume ShadCN has custom table components
 import { Button } from "@/components/ui/button";
-import { Edit, Loader2, Plus, Trash } from "lucide-react"; // Icons for edit and delete actions
+import { ChevronDown, Edit, Loader2, Plus, Trash } from "lucide-react"; // Icons for edit and delete actions
 import { useProductContext } from "@/contexts/ProductsContext";
 import AddProductForm from "./components/forms/AddProduct";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from "@
 import { SelectLabel, SelectValue } from "@radix-ui/react-select";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 
 const AllProducts = () => {
@@ -129,7 +130,32 @@ const AllProducts = () => {
                                         {paginatedProducts.slice().reverse().map((product) => (
                                             <TableRow key={product._id} className="hover:bg-gray-100 text-gray-700">
                                                 <TableCell>{product.name}</TableCell>
-                                                <TableCell>₦{Number(product.price).toLocaleString()}</TableCell>
+                                                <TableCell>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger className="flex items-center text-[#f4533e]">
+                                                            <span>₦{Number(product?.price["1.4"]).toLocaleString()}</span>
+                                                            <ChevronDown className="size-4 text-[#f4533e]"/>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent>
+                                                            <DropdownMenuItem className="flex items-center p-0 border">
+                                                                <span className="bg-black text-white p-1">1.4 ltr</span>
+                                                                <span>₦{Number(product?.price["1.4"]).toLocaleString()}</span>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem className="flex items-center p-0 border">
+                                                                <span className="bg-black text-white p-1">2 ltrs</span>
+                                                                <span>₦{Number(product?.price[2]).toLocaleString()}</span>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem className="flex items-center p-0 border">
+                                                                <span className="bg-black text-white p-1">4 ltrs</span>
+                                                                <span>₦{Number(product?.price[4]).toLocaleString()}</span>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem className="flex items-center p-0 border">
+                                                                <span className="bg-black text-white p-1">1.4 ltr</span>
+                                                                <span>₦{Number(product?.price["1.4"]).toLocaleString()}</span>
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </TableCell>
                                                 <TableCell>{product.category}</TableCell>
                                                 <TableCell className="flex justify-center space-x-4">
                                                     <Dialog>

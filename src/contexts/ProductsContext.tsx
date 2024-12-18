@@ -117,7 +117,6 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
         try {
             const response = await axios(`${baseUrl}/product/category/${categoryName}`)
             const data = await response.data
-            console.log(data);
             if (response.status == 200) {
                 setProducts(data.products)
             }
