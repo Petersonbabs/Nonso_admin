@@ -55,7 +55,7 @@ const AllProducts = () => {
                     <DialogTrigger>
                         <Button>Add new product</Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-lg mx-auto">
+                    <DialogContent className="max-w-lg mx-auto h-[90vh]">
                         <DialogTitle>Add new product</DialogTitle>
                         <AddProductForm />
                     </DialogContent>
@@ -150,19 +150,19 @@ const AllProducts = () => {
                                                                 <span>₦{Number(product?.price[4]).toLocaleString()}</span>
                                                             </DropdownMenuItem>
                                                             <DropdownMenuItem className="flex items-center p-0 border">
-                                                                <span className="bg-black text-white p-1">1.4 ltr</span>
-                                                                <span>₦{Number(product?.price["1.4"]).toLocaleString()}</span>
+                                                                <span className="bg-black text-white p-1">8 ltrs</span>
+                                                                <span>₦{Number(product?.price[8]).toLocaleString()}</span>
                                                             </DropdownMenuItem>
                                                         </DropdownMenuContent>
                                                     </DropdownMenu>
                                                 </TableCell>
                                                 <TableCell>{product.category}</TableCell>
                                                 <TableCell className="flex justify-center space-x-4">
-                                                    <Dialog>
+                                                    <Dialog >
                                                         <DialogTrigger>
                                                             <Edit className="w-4 h-4" />
                                                         </DialogTrigger>
-                                                        <DialogContent>
+                                                        <DialogContent className="h-[90vh] ">
                                                             <DialogTitle>Edit Product</DialogTitle>
                                                             <EditProductForm product={product} />
                                                         </DialogContent>

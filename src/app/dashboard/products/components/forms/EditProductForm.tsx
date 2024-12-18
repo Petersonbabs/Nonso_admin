@@ -50,10 +50,25 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
         });
     }, [product]);
 
+    // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    //     const { name, value } = e.target;
+    //     setFormData((prev) => ({ ...prev, [name]: value }));
+    // };
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
+        if (name.startsWith("price.")) {
+          const priceKey = name.replace("price.", "");
+          setFormData((prev) => ({
+            ...prev,
+            price: {
+              ...prev.price,
+              [priceKey]: parseFloat(value) || 0,
+            },
+          }));
+        } else {
+          setFormData((prev) => ({ ...prev, [name]: value }));
+        }
+      };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, files } = e.target;
@@ -87,7 +102,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
     };
 
     return (
-        <div>
+        <div className="overflow-scroll">
             <Dialog>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
