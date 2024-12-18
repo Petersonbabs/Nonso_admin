@@ -175,7 +175,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
                                 setFormData((prev) => ({ ...prev, category: value }))
                             }
                             value={formData.category}>
-                            <SelectTrigger className="text-black">
+                            <SelectTrigger className="text-black" defaultValue={formData.category}>
                                 <SelectValue placeholder="Choose category" />
                             </SelectTrigger>
                             <SelectContent>
@@ -203,10 +203,13 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
 
                     <div>
                         <Label>First Image (Upload new to replace current)</Label>
+                        
                         <Input
                             name="firstImage"
                             type="file"
                             onChange={handleFileChange}
+                            value={formData.firstImage as any}
+                            accept="image/*"
                         />
                     </div>
 
