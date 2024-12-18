@@ -7,7 +7,12 @@ import { useRouter } from "next/navigation";
 export interface ProductProps {
     _id: string;
     name: string;
-    price: string;
+    price: {
+        1.4: number,
+        2:number,
+        4:number,
+        8:number,
+    };
     description: string;
     firstImage: File;
     secondImage: File;
@@ -50,6 +55,8 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
 
     // getAllProducts
     const getAllProducts = async () => {
+        
+        
         setLoading(true)
         try {
             const response = await axios(`${baseUrl}/all/product`)
@@ -133,6 +140,8 @@ export default function ProductProvider({ children }: { children: ReactNode }) {
                     "Content-Type": "multipart/form-data",
                 }
             })
+            console.log(response);
+            
             if (response.status === 200) {
                 toast.success(response.data.message)
                 getAllProducts()

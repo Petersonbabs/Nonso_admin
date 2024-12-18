@@ -9,7 +9,6 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/
 import EditProductForm from "./components/forms/EditProductForm";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { SelectLabel, SelectValue } from "@radix-ui/react-select";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 

@@ -41,11 +41,9 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     // LOGIN
     const login = async (dataForm: UserProps) => {
         setLoading(true)
-        console.log('logging in...');
         
         try {
             const response = await axios.post(`${baseUrl}/admin/login`, dataForm as AxiosRequestConfig)
-            console.log(response);
             const data = (await response).data
             if((await response).status == 200){
                 toast.success('Login successful')
